@@ -44,7 +44,6 @@ A full-stack MERN E-Commerce platform that supports both buyers and sellers with
 * Vite
 * Tailwind CSS
 * React Router DOM
-* Axios
 * Context API
 
 ### Backend
@@ -53,7 +52,6 @@ A full-stack MERN E-Commerce platform that supports both buyers and sellers with
 * Express.js
 * MongoDB Atlas
 * Mongoose
-* JWT Authentication
 * Nodemailer
 
 ---
