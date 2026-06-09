@@ -1,35 +1,27 @@
 const nodemailer = require("nodemailer");
-const dns = require("dns");
-
-// Force IPv4 over IPv6
-dns.setDefaultResultOrder("ipv4first");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
+  host: "smtp-relay.brevo.com",
   port: 587,
-  secure: false, // STARTTLS
+  secure: false,
   auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-  },
-  tls: {
-    rejectUnauthorized: false,
+    user: process.env.BREVO_USER,
+    pass: process.env.BREVO_PASS,
   },
 });
 
-// Verify SMTP connection on startup
-transporter.verify((error, success) => {
+transporter.verify((error) => {
   if (error) {
     console.error("SMTP Connection Error:", error);
   } else {
-    console.log("SMTP Server is ready to send emails");
+    console.log("Brevo SMTP Connected Successfully");
   }
 });
 
 const sendMail = async ({ to, subject, html }) => {
   try {
     const info = await transporter.sendMail({
-      from: `"ShopEase" <${process.env.MAIL_USER}>`,
+      from: `"ShopEase" <${process.env.BREVO_USER}>`,
       to,
       subject,
       html,
