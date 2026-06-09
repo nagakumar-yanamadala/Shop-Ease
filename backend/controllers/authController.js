@@ -80,14 +80,14 @@ exports.sendOTP = async (req, res) => {
       message: "OTP sent successfully",
     });
 
-  } catch (err) {
-    console.log(err);
-
-    return res.status(500).json({
-      success: false,
-      message: "Failed to send OTP",
-    });
-  }
+  }catch (err) {
+  console.error("SEND OTP ERROR:", err);
+  return res.status(500).json({
+    success: false,
+    message: err.message,
+    stack: err.stack
+  });
+}
 };
 
 
