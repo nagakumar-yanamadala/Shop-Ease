@@ -1,36 +1,37 @@
-const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.BREVO_USER,
-    pass: process.env.BREVO_PASS,
-  },
-});
-
-transporter.verify((error) => {
-  if (error) {
-    console.error("SMTP Connection Error:", error);
-  } else {
-    console.log("Brevo SMTP Connected Successfully");
-  }
-});
+const axios = require("axios");
 
 const sendMail = async ({ to, subject, html }) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"ShopEase" <${process.env.BREVO_USER}>`,
-      to,
-      subject,
-      html,
-    });
+    const response = await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "ShopEase",
+          email: "shopeaseadmin@gmail.com", // verified sender
+        },
+        to: [
+          {
+            email: to,
+          },
+        ],
+        subject,
+        htmlContent: html,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-    console.log("Email sent:", info.messageId);
-    return info;
+    console.log("Email sent successfully:", response.data);
+    return response.data;
   } catch (error) {
-    console.error("Email sending failed:", error);
+    console.error(
+      "Email sending failed:",
+      error.response?.data || error.message
+    );
     throw error;
   }
 };
