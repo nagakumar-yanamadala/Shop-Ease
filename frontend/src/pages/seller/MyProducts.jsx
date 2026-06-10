@@ -22,9 +22,12 @@ export default function MyProducts() {
     fetch(`${url}/products`)
       .then((res) => res.json())
       .then((data) => {
-        const filteredProducts = data.filter(
-          (product) => product.hostId?.toString() === user._id.toString(),
+        const products = Array.isArray(data) ? data : [];
+
+        const filteredProducts = products.filter(
+          (product) => product?.hostId?.toString() === user?._id?.toString(),
         );
+
         setMyProducts(filteredProducts);
       })
       .catch((err) => console.error("Error fetching products:", err));
@@ -71,7 +74,7 @@ export default function MyProducts() {
 
       if (data.success) {
         setMyProducts(
-          myProducts.map((p) => (p._id === editingProduct ? data.product : p)),
+          (myProducts||[]).map((p) => (p._id === editingProduct ? data.product : p)),
         );
         setEditingProduct(null);
       } else {
@@ -105,7 +108,7 @@ export default function MyProducts() {
             </p>
           </div>
 
-          {myProducts.length === 0 ? (
+          {myProducts?.length === 0 ? (
             <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-200">
               <h3 className="text-lg font-medium text-gray-900 mb-2">
                 No products found
@@ -116,7 +119,7 @@ export default function MyProducts() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {myProducts.map((product) => (
+              {(myProducts || []).map((product) => (
                 <div key={product._id} className="relative group">
                   <ProductItem product={product} />
 
