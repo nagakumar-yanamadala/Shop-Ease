@@ -80,11 +80,11 @@ export default function SellerOrders() {
     }
   };
 
-  const totalOrders = orders.length;
-  const pendingOrders = orders.filter((o) =>
+  const totalOrders = orders?.length || 0;
+  const pendingOrders = (orders || []).filter((o) =>
     ["Pending", "Processing", "Packed"].includes(o.orderStatus),
   ).length;
-  const totalRevenue = orders.reduce(
+  const totalRevenue = (orders || []).reduce(
     (sum, order) => sum + (order.totalAmount || 0),
     0,
   );
