@@ -48,7 +48,11 @@ const AddProduct = () => {
 
       data["sectionTitle"] =
         sectionTitles[Math.floor(Math.random() * sectionTitles.length)];
-      data["hostId"] = user._id;
+      if (!user?._id) {
+        alert("Please login again");
+        return;
+      }
+      data.hostId = user._id;
 
       const response = await fetch(`${url}/product`, {
         method: "POST",
