@@ -15,7 +15,9 @@ export default function Favourites() {
           credentials: "include",
         });
         const data = await res.json();
-        setFavouriteProducts(data.favourites);
+        setFavouriteProducts(
+          Array.isArray(data?.favourites) ? data.favourites : [],
+        );
       } catch (error) {
         console.log(error);
       }
@@ -56,7 +58,7 @@ export default function Favourites() {
           </div>
 
           {/* Empty State vs Grid */}
-          {favouriteProducts.length === 0 ? (
+          {favouriteProducts?.length === 0 ? (
             <div className="bg-white rounded-xl p-12 text-center shadow-sm border border-gray-200 flex flex-col items-center">
               <div className="bg-gray-50 w-20 h-20 rounded-full flex items-center justify-center mb-5">
                 <Heart size={32} className="text-gray-400" />
@@ -76,7 +78,7 @@ export default function Favourites() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {favouriteProducts.map((product) => (
+              {(favouriteProducts || []).map((product) => (
                 <ProductItem key={product._id} product={product} />
               ))}
             </div>
